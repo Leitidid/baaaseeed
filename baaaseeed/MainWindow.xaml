@@ -1,0 +1,41 @@
+﻿<Window x:Class="baaaseeed.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+       
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:baaaseeed"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Menu>
+            <MenuItem Header="Файл">
+                <MenuItem Header="Выход" Click="MenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+        <DataGrid x:Name="dataGrid" Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Фамилия}"/>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Имя}"/>
+                <DataGridTextColumn Header="Отчество" Binding="{Binding Отчество}"/>
+                <DataGridTextColumn Header="Название команды" Binding="{Binding НазваниеКоманды}"/>
+                <DataGridTextColumn Header="дата приема в команду" Binding="{Binding ДатаПриема}"/>
+                <DataGridTextColumn Header="число заброшенных шайб" Binding="{Binding ЗаброшенныеШайбы}"/>
+                <DataGridTextColumn Header="кол-во голевых подач" Binding="{Binding ГолевыеПодачи}"/>
+                <DataGridTextColumn Header="Штрафное время" Binding="{Binding ШтрафноеВремя}"/>
+                <DataGridTextColumn Header="Сыгранные матчи" Binding="{Binding СыгранныеМатчи}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBox x:Name="searchTextBox" Width="200" Margin="5" />
+            <Button Content="Добавить" Click="AddButton_Click" Margin="5"/>
+            <Button Content="Редактировать" Click="EditButton_Click" Margin="5"/>
+            <Button Content="Удалить" Click="DeleteButton_Click" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>
