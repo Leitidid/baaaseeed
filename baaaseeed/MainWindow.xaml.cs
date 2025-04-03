@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.Text;
 using System.Windows;
@@ -19,25 +20,31 @@ namespace baaaseeed
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string connectionString = "Server=localhost\\sqlexpress; Database=spartakanddinamo; User=исп-34; Password=1234567890; Encrypt=false"; 
+        private string connectionString = "Server=localhost\\sqlexpress; Database=spartakanddinamo; User=исп-34; Password=1234567890; Encrypt=false";
         private SqlConnection connection;
         private SqlDataAdapter adapter;
         private DataTable dataTable;
+        private SpartakanddinamoContext _context; // Контекст базы данных
         public MainWindow()
         {
             InitializeComponent();
             LoadData();
+            _context = new SpartakanddinamoContext();
         }
         private void LoadData()
         {
             try
             {
-                connection = new SqlConnection(connectionString);
-                adapter = new SqlDataAdapter("SELECT * FROM Players", connection);
-                dataTable = new DataTable();
-                adapter.Fill(dataTable);
+                using (SpartakanddinamoContext db = new SpartakanddinamoContext())
+                {
+                    dataGrid.ItemsSource = db.Players.ToList()    ;
+                    //connection = new SqlConnection(connectionString);
+                    //adapter = new SqlDataAdapter("SELECT * FROM Players", connection);
+                    //dataTable = new DataTable();
+                    //adapter.Fill(dataTable);
 
-                dataGrid.ItemsSource = dataTable.DefaultView;
+            
+                }
             }
             catch (Exception ex)
             {
@@ -63,11 +70,14 @@ namespace baaaseeed
 
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
+
             if (dataGrid.SelectedItem != null)
             {
-                DataRowView selectedRow = (DataRowView)dataGrid.SelectedItem;
+               Player player = dataGrid.SelectedItem as Player;
 
+               
                 Players playerForm = new Players();
+      
 
                 if (playerForm.ShowDialog() == true)
                 {
@@ -79,6 +89,7 @@ namespace baaaseeed
             {
                 MessageBox.Show("Выберите игрока для редактирования.");
             }
+
         }
 
 
@@ -90,14 +101,12 @@ namespace baaaseeed
                 {
                     try
                     {
-                        DataRowView selectedRow = (DataRowView)dataGrid.SelectedItem;
+                        Player selectedRow = (Player)dataGrid.SelectedItem;
 
-                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        using (SpartakanddinamoContext connection = new SpartakanddinamoContext())
                         {
-                            connection.Open();
-                            string query = $"DELETE FROM Players WHERE ID = {selectedRow["ID"]}";
-                            SqlCommand command = new SqlCommand(query, connection);
-                            command.ExecuteNonQuery();
+                            connection.Players.Remove(selectedRow);
+                            connection.SaveChanges();
                         }
                         LoadData();
 
@@ -156,10 +165,29 @@ namespace baaaseeed
             }
             else
             {
-              dataGrid.ItemsSource = dataTable.DefaultView; // отображение всех данных при пустом поиске
+                dataGrid.ItemsSource = dataTable.DefaultView; // отображение всех данных при пустом поиске
             }
         }
+        private void filter_Click(object sender, RoutedEventArgs e)
+        {
+            //         if (filterTextBox.Text.IsNullOrEmpty() == false)
+            //         {
+            //             using (SpartakanddinamoContext _db = new SpartakanddinamoContext())
+            //             {
+            //                 var filtered = _db = new SpartakanddinamoContext();
+            //                 dataGrid.ItemsSource = filtered.dat();
+            //             }
+            //         }
+            //         else
+            //         {
+            //             LoadData();
+            //         }
+        }
 
-    }
+        private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+           ;
+        }
+    } 
 
 }

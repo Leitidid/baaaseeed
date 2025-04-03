@@ -18,8 +18,9 @@
                 <MenuItem Header="Выход" Click="MenuItem_Click"/>
             </MenuItem>
         </Menu>
-        <DataGrid x:Name="dataGrid" Grid.Row="1">
+        <DataGrid x:Name="dataGrid" Grid.Row="1" Margin="10,0,10,0" AutoGenerateColumns="False" SelectedCellsChanged="dataGrid_SelectedCellsChanged">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Фамилия" Binding="{Binding Фамилия}"/>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Имя}"/>
                 <DataGridTextColumn Header="Отчество" Binding="{Binding Отчество}"/>

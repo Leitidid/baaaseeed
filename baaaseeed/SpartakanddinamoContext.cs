@@ -15,7 +15,7 @@ public partial class SpartakanddinamoContext : DbContext
     {
     }
 
-    public virtual DbSet<Krasavci> Krasavcis { get; set; }
+  
 
     public virtual DbSet<Player> Players { get; set; }
 

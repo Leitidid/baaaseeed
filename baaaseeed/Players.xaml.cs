@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static baaaseeed.Players;
 
 namespace baaaseeed
 {
@@ -21,88 +23,75 @@ namespace baaaseeed
     /// </summary>
     public partial class Players : Window
     {
-        private DataRow _playerRow;
-        private string _connectionString;
-        public Players()
+
+        private string _connectionString = "Server=localhost\\sqlexpress; Database=spartakanddinamo; User=исп-34; Password=1234567890; Encrypt=false";
+        private SpartakanddinamoContext _context; // Контекст базы данных
+        private Player _player; // Объект игрокаа
+
+        public Players(Player player = null)
         {
             InitializeComponent();
 
 
-            if (_playerRow != null)
+            // Инициализация контекста базы данных
+            _context = new SpartakanddinamoContext();
+            _player = player;
+
+            if (_player != null)
             {
-                // Заполнение формы данными из строки
-                IDTextBox.Text = _playerRow["ID"].ToString();
-                SurnameTextBox.Text = _playerRow["Фамилия"].ToString();
-                NameTextBox.Text = _playerRow["Имя"].ToString();
+                // Заполнение формы данными игрока
+                IDTextBox.Text = _player.Id.ToString();
+                SurnameTextBox.Text = _player.Фамилия;
+                NameTextBox.Text = _player.Имя;
+                PatronymicTextBox.Text = _player.Отчество;
+                TeamNameTextBox.Text = _player.НазваниеКоманды;
+                JoinDatePicker.SelectedDate = _player.ДатаПриема?.ToDateTime(TimeOnly.MinValue); // Преобразование DateOnly? в DateTime?
+                GoalsTextBox.Text = _player.ЗаброшенныеШайбы?.ToString();
+                AssistsTextBox.Text = _player.ГолевыеПодачи?.ToString();
+                PenaltyMinutesTextBox.Text = _player.ШтрафноеВремя?.ToString();
+                GamesPlayedTextBox.Text = _player.СыгранныеМатчи?.ToString();
             }
+
+            // Сделать IDTextBox доступным только для чтения
+            IDTextBox.IsEnabled = false;
         }
+
         private void SavePlayer_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
-                using (SqlConnection connection = new SqlConnection(_connectionString))
+                // Создание или обновление объекта игрока
+                var player = _player ?? new Player(); // Новый игрок или существующий
+
+                // Заполнение свойств игрока
+                player.Фамилия = SurnameTextBox.Text;
+                player.Имя = NameTextBox.Text;
+                player.Отчество = PatronymicTextBox.Text;
+                player.НазваниеКоманды = TeamNameTextBox.Text;
+                player.ДатаПриема = JoinDatePicker.SelectedDate.HasValue
+                    ? DateOnly.FromDateTime(JoinDatePicker.SelectedDate.Value) // Преобразование DateTime? в DateOnly?
+                    : null;
+                player.ЗаброшенныеШайбы = int.TryParse(GoalsTextBox.Text, out int goals) ? goals : (int?)null;
+                player.ГолевыеПодачи = int.TryParse(AssistsTextBox.Text, out int assists) ? assists : (int?)null;
+                player.ШтрафноеВремя = int.TryParse(PenaltyMinutesTextBox.Text, out int penaltyMinutes) ? penaltyMinutes : (int?)null;
+                player.СыгранныеМатчи = int.TryParse(GamesPlayedTextBox.Text, out int gamesPlayed) ? gamesPlayed : (int?)null;
+
+                if (_player == null)
                 {
-                    connection.Open();
-
-
-                    string query;
-
-                    if (_playerRow == null)
-                    {
-                        // Добавление новой записи
-                        query = @"
-                        INSERT INTO Players (Фамилия, Имя, Отчество, НазваниеКоманды, ДатаПриема, ЗаброшенныеШайбы, ГолевыеПодачи, ШтрафноеВремя, СыгранныеМатчи)
-                        VALUES (@Surname, @Name, @Patronymic, @TeamName, @JoinDate, @Goals, @Assists, @PenaltyMinutes, @GamesPlayed)";
-                    }
-
-                    else
-                    {
-                        // Обновление существующей записи
-                        query = @"
-                       UPDATE Players SET 
-                          Фамилия = @Surname, 
-                          Имя = @Name, 
-                          Отчество = @Patronymic,
-                           НазваниеКоманды = @TeamName,
-                            ДатаПриема = @JoinDate,
-                           ЗаброшенныеШайбы = @Goals,
-                            ГолевыеПодачи = @Assists,
-                          ШтрафноеВремя = @PenaltyMinutes,
-                           СыгранныеМатчи = @GamesPlayed
-                       WHERE ID = @ID ";
-                    }
-
-                    SqlCommand command = new SqlCommand(query, connection);
-                    if (_playerRow != null)
-                    {
-                        command.Parameters.AddWithValue("@ID", int.Parse(IDTextBox.Text));
-
-                    }
-                    command.Parameters.AddWithValue("@Surname", SurnameTextBox.Text);
-                    command.Parameters.AddWithValue("@Name", NameTextBox.Text);
-                    command.Parameters.AddWithValue("@Patronymic", PatronymicTextBox.Text);
-                    command.ExecuteNonQuery();
+                    // Добавление нового игрока
+                    _context.Players.Add(player);
                 }
+
+                // Сохранение изменений в базе данных
+                _context.SaveChanges();
+
+                MessageBox.Show("Данные успешно сохранены!");
                 DialogResult = true;
-            }
-
-            catch (FormatException)
-            {
-                MessageBox.Show("Неверный формат данных. Пожалуйста, введите корректные значения.");
-            }
-            catch (SqlException ex)
-            {
-
-                MessageBox.Show("Ошибка базы данных: " + ex.Message);
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show("Произошла ошибка: " + ex.Message);
-
             }
-
         }
     }
 }

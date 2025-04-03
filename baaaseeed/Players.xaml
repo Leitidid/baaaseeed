@@ -5,23 +5,80 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:baaaseeed"
         mc:Ignorable="d"
-        Title="Players" Height="450" Width="400">
-    <Grid>
+        Title="Players" Height="741" Width="400">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Margin="20">
-            <TextBox x:Name="IDTextBox" IsEnabled="False" />
-            <TextBox x:Name="SurnameTextBox" Text="{Binding Фамилия}" Height="45" />
-            <TextBox x:Name="NameTextBox" Text="{Binding Имя}" />
-            <TextBox x:Name="PatronymicTextBox" Text="{Binding Отчество}" />
-            <TextBox x:Name="TeamNameTextBox" Text="{Binding НазваниеКоманды}" />
-            <DatePicker x:Name="JoinDatePicker" SelectedDate="{Binding ДатаПриема}" />
-            <TextBox x:Name="GoalsTextBox" Text="{Binding ЗаброшенныеШайбы}" />
-            <TextBox x:Name="AssistsTextBox" Text="{Binding ГолевыеПодачи}" />
-            <TextBox x:Name="PenaltyMinutesTextBox" Text="{Binding ШтрафноеВремя}" />
-            <TextBox x:Name="GamesPlayedTextBox" Text="{Binding СыгранныеМатчи}" />
-            <Button x:Name="SavePlayer" Content="Сохранить" Click="SavePlayer_Click" />
+
+
+        <TextBox x:Name="IDTextBox" IsEnabled="False" Visibility="Collapsed" />
+
+
+        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Фамилия:" FontSize="14" FontWeight="Bold"/>
+            <TextBox x:Name="SurnameTextBox" Text="{Binding Фамилия}" Height="30" />
         </StackPanel>
+
+
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Имя:" FontSize="14" FontWeight="Bold"/>
+            <TextBox x:Name="NameTextBox" Text="{Binding Имя}" Height="30" />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Отчество:" FontSize="14" FontWeight="Bold"/>
+            <TextBox x:Name="PatronymicTextBox" Text="{Binding Отчество}" Height="30" />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="3" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Команда:" FontSize="14" FontWeight="Bold"/>
+            <TextBox x:Name="TeamNameTextBox" Text="{Binding НазваниеКоманды}" Height="30" />
+        </StackPanel>
+
+ 
+        <StackPanel Grid.Row="4" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Дата приема:" FontSize="14" FontWeight="Bold"/>
+            <DatePicker x:Name="JoinDatePicker" SelectedDate="{Binding ДатаПриема}" Height="30" />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="5" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Заброшенные шайбы:" FontSize="14" FontWeight="Bold"/>
+            <TextBox x:Name="GoalsTextBox" Text="{Binding ЗаброшенныеШайбы}" Height="30" />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="6" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Голевые передачи:" FontSize="14" FontWeight="Bold"/>
+            <TextBox x:Name="AssistsTextBox" Text="{Binding ГолевыеПодачи}" Height="30" />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="7" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Штрафное время:" FontSize="14" FontWeight="Bold"/>
+            <TextBox x:Name="PenaltyMinutesTextBox" Text="{Binding ШтрафноеВремя}" Height="30" />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="8" Orientation="Vertical" Margin="0,0,0,10">
+            <Label Content="Сыгранные матчи:" FontSize="14" FontWeight="Bold"/>
+            <TextBox x:Name="GamesPlayedTextBox" Text="{Binding СыгранныеМатчи}" Height="30" />
+        </StackPanel>
+
+        <Button x:Name="SavePlayer" Grid.Row="9" Content="Сохранить" 
+                Click="SavePlayer_Click" Height="40" Margin="0,20,0,0"/>
     </Grid>
 </Window>
