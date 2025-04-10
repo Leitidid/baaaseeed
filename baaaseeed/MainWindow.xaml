@@ -20,12 +20,12 @@
         </Menu>
         <DataGrid x:Name="dataGrid" Grid.Row="1" Margin="10,0,10,0" AutoGenerateColumns="False" SelectedCellsChanged="dataGrid_SelectedCellsChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Фамилия" Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="Фамилия" Binding="{Binding Фамилия}"/>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Имя}"/>
                 <DataGridTextColumn Header="Отчество" Binding="{Binding Отчество}"/>
                 <DataGridTextColumn Header="Название команды" Binding="{Binding НазваниеКоманды}"/>
-                <DataGridTextColumn Header="дата приема в команду" Binding="{Binding ДатаПриема}"/>
+                <DataGridTextColumn Header="дата приема в команду" Binding="{Binding ДатаПриема, StringFormat=\{0:d\}}"/>
                 <DataGridTextColumn Header="число заброшенных шайб" Binding="{Binding ЗаброшенныеШайбы}"/>
                 <DataGridTextColumn Header="кол-во голевых подач" Binding="{Binding ГолевыеПодачи}"/>
                 <DataGridTextColumn Header="Штрафное время" Binding="{Binding ШтрафноеВремя}"/>
@@ -34,9 +34,12 @@
         </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBox x:Name="searchTextBox" Width="200" Margin="5" />
+            <Button Content="Поиск" Click="SearchPlayer_Click" Margin="5"/>
             <Button Content="Добавить" Click="AddButton_Click" Margin="5"/>
             <Button Content="Редактировать" Click="EditButton_Click" Margin="5"/>
             <Button Content="Удалить" Click="DeleteButton_Click" Margin="5"/>
+            <Button Content="Фильтр по шайбам" Click="FilterByGoals_Click" Margin="5"/>
         </StackPanel>
+
     </Grid>
 </Window>
